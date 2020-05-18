@@ -34,44 +34,46 @@ function App() {
     //console.log(jsonResponse)
     setMovieList(jsonResponse.movies)
 
-    const responseWish = await fetch('wishlist-movie')
-    const jsonResponseWish = await responseWish.json()
+const responseWish = await fetch('/wishlist-movie')
+const jsonResponseWish = await responseWish.json()
 
-    const wishlistFromDB = jsonResponseWish.movies.map((movie,i) => {
-      return {name:movie.movieName, img:movie.movieImg}
-    })
+const wishlistFromDB = jsonResponseWish.movies.map((movie,i) => {
+  return {name:movie.movieName, img:movie.movieImg}
+})
 
-    setMoviesWishList(wishlistFromDB)
-    setMoviesCount(jsonResponseWish.movies.length)
+setMoviesWishList(wishlistFromDB)
+setMoviesCount(jsonResponseWish.movies.length)
 
-    //console.log(jsonResponseWish)
+//console.log(jsonResponseWish)
   }, [])
 
   var handleClickAddMovie = async (name, img) => {
     setMoviesCount(moviesCount+1)
     setMoviesWishList([...moviesWishList, {name:name,img:img}])
 
-    const response = await fetch('/wishlist-movie', {
-      method: 'POST',
-      headers: {'Content-Type':'application/x-www-form-urlencoded'},
-      body: `name=${name}&img=${img}`
-    })
+const response = await fetch('/wishlist-movie', {
+  method: 'POST',
+  headers: {'Content-Type':'application/x-www-form-urlencoded'},
+  body: `name=${name}&img=${img}`
+})
+console.log(response)
   }
 
   var handleClickDeleteMovie = async (name) => {
     setMoviesCount(moviesCount-1)
-    setMoviesWishList(moviesWishList.filter(object => object.name != name))
+    setMoviesWishList(moviesWishList.filter(object => object.name !== name))
 
-    const response = await fetch(`/wishlist-movie/${name}`, {
-      method: 'DELETE'
-    })
+const response = await fetch(`/wishlist-movie/${name}`, {
+  method: 'DELETE'
+})
+console.log(response)
   }
 
   var cardWish = moviesWishList.map((movie,i) => {
     return (
       <ListGroupItem>
         <ListGroupItemText onClick={() => {handleClickDeleteMovie(movie.name)}}>
-        <img width="25%" src={movie.img} /> {movie.name}
+        <img width="25%" src={movie.img} alt={movie.name}/> {movie.name}
         </ListGroupItemText>
       </ListGroupItem>
     )
@@ -87,27 +89,27 @@ function App() {
   // ]
 
   var movieListItems = movieList.map((movie,i) => {
-    var result = moviesWishList.find(element => element.name == movie.title)
+    var result = moviesWishList.find(element => element.name === movie.title)
     var isSee = false
-    if(result != undefined){
+    if(result !== undefined){
       isSee = true
     }
-    var result = movie.overview
+     result = movie.overview
     if(result.length > 80){
       result = result.slice(0,80)+'...'
     }
 
-    var urlImage = '/generique.jpg'
-    if(movie.backdrop_path != null){
-      urlImage = 'https://image.tmdb.org/t/p/w500/'+movie.backdrop_path
-    }
-    return(<Movie key={i} movieSee={isSee} handleClickDeleteMovieParent={handleClickDeleteMovie} handleClickAddMovieParent={handleClickAddMovie} movieName={movie.title} movieDesc={result} movieImg={urlImage} globalRating={movie.popularity} globalCountRating={movie.vote_count} />)
+var urlImage = '/generique.jpg'
+if(movie.backdrop_path != null){
+  urlImage = 'https://image.tmdb.org/t/p/w500/'+movie.backdrop_path
+}
+return(<Movie key={i} movieSee={isSee} handleClickDeleteMovieParent={handleClickDeleteMovie} handleClickAddMovieParent={handleClickAddMovie} movieName={movie.title} movieDesc={result} movieImg={urlImage} globalRating={movie.popularity} globalCountRating={movie.vote_count} />)
   })
 
   return (
-    <div style={{backgroundColor:"#232528"}}>
-      <Container>
-        <Nav>
+    <div>
+      
+        <Nav style={{backgroundColor:"#000"}}>
           <span className="navbar-brand">
             <img src="./logo.png" width="30" height="30" className="d-inline-block align-top" alt="logo" />
           </span>
@@ -128,6 +130,7 @@ function App() {
             </NavLink>
           </NavItem>
         </Nav>
+        <Container style={{marginTop:"30px"}}>
         <Row>
           {movieListItems}
         </Row>

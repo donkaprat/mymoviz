@@ -94,9 +94,9 @@ function Movie(props) {
 
   return (
     <Col xs="12" lg="6" xl="4">
-    <Card style={{marginBottom:30}}>
+    <Card style={{marginBottom:30, backgroundColor:"#000", color:"#fff", borderRadius:"0px", border:"none"}}>
     <CardImg top src={props.movieImg} alt={props.movieName} />
-    <CardBody>
+    <CardBody style={{minHeight:"315px"}}>
         <p>Like <FontAwesomeIcon style={colorLike} icon={faHeart} onClick={() => changeLiked(props.movieName,props.movieImg)} /></p>
   <p>Nombre de vues  <FontAwesomeIcon style={colorWatch} icon={faVideo} onClick={() => addWatch()} /> <Badge color="secondary">{countWatchMovie}</Badge></p>
         <p>Mon avis 
